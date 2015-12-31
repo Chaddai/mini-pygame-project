@@ -7,6 +7,7 @@ Created on Thu Dec 31 14:43:20 2015
 
 import pygame
 from pygame.locals import *
+from constants import *
 
 def step(world, inputs):
     pass
