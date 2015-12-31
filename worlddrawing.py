@@ -17,5 +17,5 @@ def create_background(assets, laby):
             bg.blit(tile, (x*tw,y*th-int(sf*50)))
     return bg
     
-def draw_world(win, world):
-    pass
+def draw_world(win, world, assets):
+    win.blit(assets['Character Boy'], world['character position'])

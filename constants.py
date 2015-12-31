@@ -18,3 +18,7 @@ tilewidth = winwidth // labwidth
 tileheight = int(tilehwscale * tilewidth)
 
 scale_factor = tilewidth / 101
+
+assets_center = {
+    'Character Boy': (50,140)
+    }

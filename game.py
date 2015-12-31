@@ -10,18 +10,17 @@ Created on Thu Dec 31 13:53:51 2015
 import pygame
 from pygame.locals import *
 import os.path
-from random import randint
 from constants import *
 from labyrinthes import fabrique_labyrinthe
 from assetsloader import create_assets
 from worlddrawing import create_background, draw_world
-from worldmanager import step, event_loop
+from worldmanager import step, event_loop, random_position
 
 
 # Initialisation du monde
 laby = fabrique_labyrinthe(labwidth, labheight)
 
-world = ()
+world = {'character position' : random_position(laby, "Character Boy")}
 
 # Initialisation de la librairie
 pygame.init()
@@ -40,7 +39,7 @@ while continuer == True:
     # On réaffiche totalement l'écran, en commençant par le fond
     window.blit(background, (0, 0))
     # Puis en traçant les diverses décorations et éléments interactifs
-    draw_world(window, world)
+    draw_world(window, world, assets)
     
     pygame.display.flip()
 
