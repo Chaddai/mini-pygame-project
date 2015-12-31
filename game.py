@@ -14,7 +14,7 @@ from constants import *
 from labyrinthes import fabrique_labyrinthe
 from assetsloader import create_assets
 from worlddrawing import create_background, draw_world
-from worldmanager import step, event_loop, random_position
+from worldmanager import step, event_loop
 
 
 # Initialisation du monde

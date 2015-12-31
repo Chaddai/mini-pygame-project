@@ -13,8 +13,9 @@ def create_background(assets, laby):
     bg = pygame.Surface((winwidth, winheight))
     for y in range(lh):
         for x in range(lw):
-            tile = assets["Grass Block" if laby[y][x] == 0 else "Water Block"]
-            bg.blit(tile, (x*tw,y*th-int(sf*50)))
+            land = "Grass Block" if laby[y][x] == 0 else "Water Block"
+            tile = assets[land]
+            bg.blit(tile, laby_to_screen(x,y,land))
     return bg
     
 def draw_world(win, world, assets):
