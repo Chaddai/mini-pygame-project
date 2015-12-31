@@ -20,7 +20,7 @@ from worldmanager import step, event_loop
 # Initialisation du monde
 laby = fabrique_labyrinthe(labwidth, labheight)
 
-world = {'character position' : random_position(laby, "Character Boy")}
+world = {'pc' : {'lpos' : random_position(laby), 'sprite': "Character Boy"}}
 
 # Initialisation de la librairie
 pygame.init()
@@ -47,6 +47,6 @@ while continuer == True:
     (continuer, inputs) = event_loop()
     
     # et on modifie le monde selon les entrées
-    step(world, inputs)
+    step(laby, world, inputs)
 
 pygame.quit()

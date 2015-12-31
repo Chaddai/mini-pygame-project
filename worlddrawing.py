@@ -19,4 +19,14 @@ def create_background(assets, laby):
     return bg
     
 def draw_world(win, world, assets):
-    win.blit(assets['Character Boy'], world['character position'])
+    def ypos(obj): 
+        (name, prop) = obj
+        if 'pos' in prop:
+            return prop['pos']
+        else:
+            (x,y) = prop['lpos']
+            prop['pos'] = laby_to_screen(x,y,prop['sprite'])
+            return prop['pos']
+    orderedWorld = sorted(world.items(), key=ypos)
+    for (name,prop) in orderedWorld:
+        win.blit(assets[prop['sprite']], prop['pos'])
