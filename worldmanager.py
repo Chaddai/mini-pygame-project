@@ -18,6 +18,11 @@ def step(laby, world, inputs):
     if pos_valid(laby, nx, ny):
         pc['lpos'] = (nx,ny)
         del pc['pos']
+        treasure_name = world['treasures'][ny][nx]
+        if type(treasure_name) == str:
+            world['treasures'][ny][nx] = 0
+            treasure = world['objects'].pop(treasure_name)
+            world['score'][treasure['sprite']] += 1
 
 def event_loop():
     continuer = True

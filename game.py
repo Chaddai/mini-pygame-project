@@ -27,7 +27,8 @@ objs.update(ts)
 world = {
     'laby' : laby,
     'treasures' : tm,
-    'objects' : objs
+    'objects' : objs,
+    'score' : dict([(cat, 0) for cat in treasure_sprites])
 }
 
 # Initialisation de la librairie
