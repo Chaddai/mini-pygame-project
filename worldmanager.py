@@ -11,7 +11,7 @@ from constants import *
 from random import randint
 
 def step(laby, world, inputs):
-    pc = world['pc']
+    pc = world['objects']['pc']
     (lx,ly) = pc['lpos']
     (dx,dy) = inputs
     (nx,ny) = (lx+dx, ly+dy)

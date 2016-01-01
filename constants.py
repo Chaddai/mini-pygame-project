@@ -25,7 +25,9 @@ scale_factor = tilewidth / 101
 assets_center = {
     'Character Boy': (50,140),
     'Grass Block': (50,90),
-    'Water Block': (50,90)
+    'Water Block': (50,90),
+    'Star' : (50,125),
+    'Heart' : (50,125)
     }
 
 def laby_to_screen(x,y,assetname):
@@ -43,6 +45,20 @@ def random_position(laby):
 
 def pos_valid(laby, x, y):
     return 0 < x < labwidth and 0 < y < labheight and laby[y][x] == 0
+
+treasure_sprites = ['Star', 'Heart']
+    
+def create_treasure_map(laby, n):
+    def select_random_treasure():
+        return treasure_sprites[randint(0,len(treasure_sprites)-1)]
+    tm = [line.copy() for line in laby]
+    ts = {}
+    for i in range(n):
+        name = 't%03d' % i
+        (x,y) = random_position(tm)
+        tm[y][x] = name
+        ts[name] = {'lpos' : (x,y), 'sprite' : select_random_treasure()}
+    return (tm, ts)
 
 directions = {
     K_KP1 : (-1,1),

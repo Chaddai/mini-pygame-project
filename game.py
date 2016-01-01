@@ -20,7 +20,15 @@ from worldmanager import step, event_loop
 # Initialisation du monde
 laby = fabrique_labyrinthe(labwidth, labheight)
 
-world = {'pc' : {'lpos' : random_position(laby), 'sprite': "Character Boy"}}
+(tm, ts) = create_treasure_map(laby, 10)
+objs = {'pc' : {'lpos' : random_position(laby), 'sprite': "Character Boy"}}
+objs.update(ts)
+
+world = {
+    'laby' : laby,
+    'treasures' : tm,
+    'objects' : objs
+}
 
 # Initialisation de la librairie
 pygame.init()

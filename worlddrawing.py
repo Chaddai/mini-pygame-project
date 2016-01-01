@@ -27,6 +27,6 @@ def draw_world(win, world, assets):
             (x,y) = prop['lpos']
             prop['pos'] = laby_to_screen(x,y,prop['sprite'])
             return prop['pos']
-    orderedWorld = sorted(world.items(), key=ypos)
+    orderedWorld = sorted(world['objects'].items(), key=ypos)
     for (name,prop) in orderedWorld:
         win.blit(assets[prop['sprite']], prop['pos'])
