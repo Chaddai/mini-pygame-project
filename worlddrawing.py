@@ -7,16 +7,25 @@ Created on Thu Dec 31 14:29:48 2015
 
 import pygame
 from constants import *
+from random import choice
 
 def create_background(assets, laby):
     (lw, lh, tw, th, sf) = (labwidth, labheight, tilewidth, tileheight, scale_factor)
     bg = pygame.Surface((winwidth, winheight))
+    deco = {}
+    decocount = 0
     for y in range(lh):
         for x in range(lw):
-            land = "Grass Block" if laby[y][x] == 0 else "Water Block"
+            land = "Grass Block" 
+            if laby[y][x] == 1:
+                land = "Water Block"
+                if isolated(laby,x,y):
+                    land = "Dirt Block"
+                    decocount += 1
+                    deco["d%03d" % decocount] = {'lpos' : (x,y), 'sprite' : choice(deco_sprites)}
             tile = assets[land]
             bg.blit(tile, laby_to_screen(x,y,land))
-    return bg
+    return (bg, deco)
     
 def draw_world(win, world, assets):
     def ypos(obj): 

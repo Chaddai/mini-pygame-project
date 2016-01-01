@@ -5,7 +5,7 @@ Created on Thu Dec 31 15:42:37 2015
 @author: chaddai
 """
 
-from random import randint
+from random import randint, choice
 from pygame.locals import *
 
 # Initialisation des constantes
@@ -26,6 +26,11 @@ assets_center = {
     'Character Boy': (50,140),
     'Grass Block': (50,90),
     'Water Block': (50,90),
+    'Dirt Block' : (50,90),
+    'Rock' : (50,135),
+    'Tree Short' : (50,135),
+    'Tree Tall' : (50,135),
+    'Tree Ugly' : (50,135),
     'Star' : (50,125),
     'Heart' : (50,125)
     }
@@ -44,20 +49,26 @@ def random_position(laby):
             return (x,y)
 
 def pos_valid(laby, x, y):
-    return 0 < x < labwidth and 0 < y < labheight and laby[y][x] == 0
+    return 0 <= x < labwidth and 0 <= y < labheight and laby[y][x] == 0
+    
+def isolated(laby, x, y):
+    for (dx,dy) in directions.values():
+        (nx, ny) = (x+dx, y+dy)
+        if 0 <= nx < labwidth and 0 <= ny < labheight and laby[ny][nx] == 1:
+            return False
+    return True
 
 treasure_sprites = ['Star', 'Heart']
+deco_sprites = ['Rock', 'Tree Short', 'Tree Tall', 'Tree Ugly']
     
 def create_treasure_map(laby, n):
-    def select_random_treasure():
-        return treasure_sprites[randint(0,len(treasure_sprites)-1)]
     tm = [line.copy() for line in laby]
     ts = {}
     for i in range(n):
         name = 't%03d' % i
         (x,y) = random_position(tm)
         tm[y][x] = name
-        ts[name] = {'lpos' : (x,y), 'sprite' : select_random_treasure()}
+        ts[name] = {'lpos' : (x,y), 'sprite' : choice(treasure_sprites)}
     return (tm, ts)
 
 directions = {

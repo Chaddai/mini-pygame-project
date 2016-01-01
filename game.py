@@ -37,7 +37,9 @@ pygame.init()
 # Création de la fenêtre et du labyrinthe en arrière plan
 window = pygame.display.set_mode((winwidth, winheight))
 assets = create_assets("images")
-background = create_background(assets, laby)
+(background, decos) = create_background(assets, laby)
+world['objects'].update(decos)
+
 
 window.blit(background, (0, 0))
 pygame.display.flip()
