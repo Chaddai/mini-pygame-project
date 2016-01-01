@@ -30,3 +30,17 @@ def draw_world(win, world, assets):
     orderedWorld = sorted(world['objects'].items(), key=ypos)
     for (name,prop) in orderedWorld:
         win.blit(assets[prop['sprite']], prop['pos'])
+    render_score(win,world,assets,0,0)
+
+def render_score(win,world,assets,x,y):
+    sf=0.5
+    count = len(treasure_sprites)
+    font = pygame.font.SysFont('ComicSans', 50, bold=True)
+    score_im = pygame.Surface((count*tilewidth, 2*count*tileheight), flags=SRCALPHA)
+    score_im.fill((255,255,255,0))
+    for j in range(count):
+        sprite = treasure_sprites[j]
+        score_im.blit( font.render( "%d ×" % world['score'][sprite], True, (255,255,255,0) ), (0, (j*2+1)*tileheight) )
+        score_im.blit( assets[sprite], laby_to_screen(1,1+j*2,sprite) )
+    score_im = pygame.transform.smoothscale(score_im, ( int(sf*score_im.get_width()), int(sf*score_im.get_height()) ) )
+    win.blit(score_im,(x,y))
