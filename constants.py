@@ -11,11 +11,13 @@ from pygame.locals import *
 # Initialisation des constantes
 tilehwscale = 80/101
 
-winwidth = 900
-winheight = int(tilehwscale * winwidth)
-
-labwidth = 15
+labwidth = 21
 labheight = 15
+
+winwidth = 1050
+winheight = int(labheight / labwidth * tilehwscale * winwidth)
+
+
 
 tilewidth = winwidth // labwidth
 tileheight = int(tilehwscale * tilewidth)
