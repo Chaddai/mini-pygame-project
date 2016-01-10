@@ -52,7 +52,7 @@ def random_position(laby):
 
 def pos_valid(laby, x, y):
     return 0 <= x < labwidth and 0 <= y < labheight and laby[y][x] == 0
-    
+
 def isolated(laby, x, y):
     for (dx,dy) in directions.values():
         (nx, ny) = (x+dx, y+dy)
@@ -62,9 +62,9 @@ def isolated(laby, x, y):
 
 treasure_sprites = ['Star', 'Heart']
 deco_sprites = ['Rock', 'Tree Short', 'Tree Tall', 'Tree Ugly']
-    
+
 def create_treasure_map(laby, n):
-    tm = [line.copy() for line in laby]
+    tm = [list(line) for line in laby]
     ts = {}
     for i in range(n):
         name = 't%03d' % i
