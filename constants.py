@@ -8,22 +8,24 @@ Created on Thu Dec 31 15:42:37 2015
 from random import randint, choice
 from pygame.locals import *
 
-# Initialisation des constantes
+# Constantes gouvernant l'aspect du labyrinthe
 tilehwscale = 80/101
 
+# Attention, ces largeurs et hauteurs doivent être impaires
 labwidth = 15
 labheight = 15
 
+# Ajustez seulement la largeur, la hauteur sera automatiquement ajustée selon
+# les dimensions du labyrinthe et l'aspect des tuiles de terrain
 winwidth = 750
+
+# générées automatiquement, ne pas toucher
 winheight = int(labheight / labwidth * tilehwscale * winwidth)
-
-
-
 tilewidth = winwidth // labwidth
 tileheight = int(tilehwscale * tilewidth)
-
 scale_factor = tilewidth / 101
 
+# les coordonnées dans l'image ressource qui doivent se retrouver au centre de la tuile
 assets_center = {
     'Character Boy': (50,140),
     'Grass Block': (50,90),
@@ -37,42 +39,39 @@ assets_center = {
     'Heart' : (50,125)
     }
 
+# quelques fonctions utilitaires pour les autres modules
 def laby_to_screen(x,y,assetname):
-    (xc,yc)=assets_center.get(assetname, (50.5,140))
-    # Ceci correspond à une translation de sf*(xc,yc) au centre de la tuile
-    # de coordonnées x, y
-    return (int(x*tilewidth+tilewidth/2-scale_factor*xc)
-        , int(y*tileheight+tileheight/2-scale_factor*yc) )
+    """Traduit une position dans le labyrinthe en coordonnées absolue
+    dans la fenêtre. Le nom de la ressource est nécessaire pour un ajustement
+    fin"""
 
-def random_position(laby):
+    # par défaut on considère que le centre d'une tuile est aux coordonnée (50.5, 140)
+    # mais on privilégie les données dans le dictionnaire assets_center
+    (xc,yc)=assets_center.get(assetname, (50.5,140))
+
+    # Ceci correspond à une translation de scale_factor*(xc,yc) au centre de la tuile
+    # de coordonnées (x, y) dans la fenêtre
+    return (int(x*tilewidth+tilewidth/2 - scale_factor*xc)
+        , int(y*tileheight+tileheight/2 - scale_factor*yc) )
+
+def random_free_position(laby):
+    """Retourne une position aléatoire complètement vide d'après l'argument passé"""
     while True:
         (x,y) = (randint(1,labwidth-2),randint(1,labheight-2))
         if laby[y][x] == 0 :
             return (x,y)
 
-def pos_valid(laby, x, y):
-    return 0 <= x < labwidth and 0 <= y < labheight and laby[y][x] == 0
+def pos_valid(world, x, y):
+    """Vérifie si une position est accessible pour le joueur"""
+    return 0 <= x < labwidth and 0 <= y < labheight and world['bonus map'][y][x] != 1
 
-def isolated(laby, x, y):
-    for (dx,dy) in directions.values():
-        (nx, ny) = (x+dx, y+dy)
-        if 0 <= nx < labwidth and 0 <= ny < labheight and laby[ny][nx] == 1:
-            return False
-    return True
+# la liste des bonus possibles
+bonus_sprites = ['Star', 'Heart']
 
-treasure_sprites = ['Star', 'Heart']
+# la liste des décorations possibles
 deco_sprites = ['Rock', 'Tree Short', 'Tree Tall', 'Tree Ugly']
 
-def create_treasure_map(laby, n):
-    tm = [list(line) for line in laby]
-    ts = {}
-    for i in range(n):
-        name = 't%03d' % i
-        (x,y) = random_position(tm)
-        tm[y][x] = name
-        ts[name] = {'lpos' : (x,y), 'sprite' : choice(treasure_sprites)}
-    return (tm, ts)
-
+# dictionnaire associant à une touche du pavé numérique le déplacement correspondant
 directions = {
     K_KP1 : (-1,1),
     K_KP2 : (0,1),

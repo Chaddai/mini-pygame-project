@@ -6,73 +6,66 @@ Created on Thu Dec 31 13:53:51 2015
 """
 
 import pygame
-from pygame.locals import *
-import os.path
 from constants import *
 from labyrinthes import fabrique_labyrinthe
 from assetsloader import create_assets
-from worlddrawing import create_background, draw_world
-from worldmanager import step, event_loop
+from gameworld import *
+
+##### Initialisation de la librairie pygame #####
+
+pygame.init()
+window = pygame.display.set_mode((winwidth, winheight))
+pygame.key.set_repeat(200,200)
 
 
 ##### Initialisation du monde #####
 
 laby = fabrique_labyrinthe(labwidth, labheight)
 
-# Création et placement des bonus sur la carte
-(tm, ts) = create_treasure_map(laby, 10)
-objs = {'pc' : {'lpos' : random_position(laby), 'sprite': "Character Boy"}}
-# On ajoute les bonus dans la liste des objets 
-objs.update(ts)
-
-# Le monde est décrit dans un dictionnaire, la clé "objects" contient un 
-# dictionnaire de tous les éléments de premier plan (dont le joueur)
+# Le monde est décrit dans un dictionnaire, la clé "objects" contient un
+# dictionnaire de tous les éléments de premier plan (dont le joueur, le Player Character)
 world = {
     'laby' : laby,
-    'treasures' : tm,
-    'objects' : objs,
-    'score' : dict([(cat, 0) for cat in treasure_sprites])
+    'objects' : {},
+    'score' : {cat : 0 for cat in bonus_sprites}, # initialiser le score à 0 pour tous les bonus possibles
+    'bonus map': None,
+    'background': None
 }
 
+# Création et placement des bonus sur la carte
+(bonus_map, bonus) = create_bonus(laby, 10)
+world['bonus map'] = bonus_map
+# On ajoute les bonus dans la liste des objets
+world['objects'].update(bonus)
 
-##### Initialisation de la librairie pygame #####
-
-pygame.init()
-window = pygame.display.set_mode((winwidth, winheight))
-
-
-##### Création du labyrinthe en arrière plan #####
+# On positionne le joueur sur une position libre
+world['objects']['pc'] = {'lpos' : random_free_position(world['bonus map']), 'sprite': "Character Boy"}
 
 # Chargement des images ressources dans un dictionnaire qui à
 # chaque nom de fichier (sans extension) associe l'image
 # correctement redimensionnée
 assets = create_assets("images")
 
-# On crée l'arrière-plan et on en profite pour générer les 
+# On crée l'arrière-plan et on en profite pour générer les
 # "décorations" comme les arbres et les rochers...
-(background, decos) = create_background(assets, laby)
+(background, decos) = create_background(laby, assets)
+world['background'] = background
 # ...qu'on ajoute alors aux objets d'avant plan dans le monde
 world['objects'].update(decos)
 
 
 ##### Boucle principale #####
 
-window.blit(background, (0, 0))
-pygame.display.flip()
-
 continuer = True
 while continuer == True:
-    # On réaffiche totalement l'écran, en commençant par le fond
-    window.blit(background, (0, 0))
-    # Puis en traçant les diverses décorations et éléments interactifs
+    # On dessine le monde
     draw_world(window, world, assets)
-    
     pygame.display.flip()
 
     # puis on gère les événements
-    (continuer, inputs) = event_loop()
-    
+    (continuer, inputs) = event_handler()
+
     # et on modifie le monde selon les entrées
-    step(laby, world, inputs)
+    step(world, inputs)
 
 pygame.quit()
