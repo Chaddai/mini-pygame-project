@@ -27,7 +27,7 @@ laby = fabrique_labyrinthe(labwidth, labheight)
 world = {
     'laby' : laby,
     'objects' : {},
-    'score' : {cat : 0 for cat in bonus_sprites}, # initialiser le score à 0 pour tous les bonus possibles
+    'score' : {bonus_name : 0 for bonus_name in bonus_sprites}, # initialiser le score à 0 pour tous les bonus possibles
     'bonus map': None,
     'background': None
 }
